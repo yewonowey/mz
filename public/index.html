@@ -49,16 +49,23 @@
 <body>
     <div class="container">
         <h1>MZ Classifier</h1>
-        <form id="classifyForm">
+        <form id="classifyForm" style="display:none;">
             <input type="text" name="text" placeholder="Enter text" required>
             <button type="submit">Classify</button>
         </form>
-        <button id="endButton">End</button>
+        <button id="startButton">Start</button>
+        <button id="endButton" style="display:none;">End</button>
         <div class="result" id="result"></div>
     </div>
     <script>
         let mzCount = 0;
         let notMzCount = 0;
+
+        document.getElementById('startButton').addEventListener('click', function() {
+            document.getElementById('classifyForm').style.display = 'block';
+            document.getElementById('startButton').style.display = 'none';
+            document.getElementById('endButton').style.display = 'inline';
+        });
 
         document.getElementById('classifyForm').addEventListener('submit', async function(e) {
             e.preventDefault();
@@ -81,13 +88,18 @@
         });
 
         document.getElementById('endButton').addEventListener('click', function() {
+            let finalResult = '';
             if (mzCount > notMzCount) {
-                document.getElementById('result').textContent = '결과: mz네요';
+                finalResult = '결과: mz네요';
             } else {
-                document.getElementById('result').textContent = '결과: not mz네요';
+                finalResult = '결과: not mz네요';
             }
+            document.getElementById('result').textContent = finalResult;
             mzCount = 0;
             notMzCount = 0;
+            document.getElementById('classifyForm').style.display = 'none';
+            document.getElementById('startButton').style.display = 'inline';
+            document.getElementById('endButton').style.display = 'none';
         });
     </script>
 </body>
