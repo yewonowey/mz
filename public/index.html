@@ -85,10 +85,13 @@
             const result = await response.json();
             if (result.result === 'MZ!') {
                 mzCount++;
+                document.getElementById('classifyResult').textContent = `이건 ${result.result}`;
             } else if (result.result === 'NOT MZ!') {
                 notMzCount++;
+                document.getElementById('classifyResult').textContent = `이건 ${result.result}`;
+            } else {
+                document.getElementById('classifyResult').textContent = `Error: ${result.result}`;
             }
-            document.getElementById('classifyResult').textContent = `이건 ${result.result}`;
             e.target.reset();
         });
 
@@ -104,7 +107,7 @@
             document.getElementById('finalResult').textContent = finalResult;
             document.getElementById('classifyForm').style.display = 'none';
             document.getElementById('startButton').style.display = 'inline';
-            document.getElementById('startButton').textContent = '다시하기';
+            document.getElementById('startButton').textContent = '다시하기'; // 여기서 버튼의 텍스트를 변경합니다.
             document.getElementById('endButton').style.display = 'none';
             document.getElementById('classifyResult').textContent = '';
         });
