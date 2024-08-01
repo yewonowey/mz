@@ -96,8 +96,10 @@
             let finalResult = '';
             if (mzCount > notMzCount) {
                 finalResult = '결과: mz네요';
-            } else {
+            } else if (notMzCount > mzCount) {
                 finalResult = '결과: not mz네요';
+            } else {
+                finalResult = '결과: mz와 not mz의 수가 같습니다';
             }
             document.getElementById('finalResult').textContent = finalResult;
             document.getElementById('classifyForm').style.display = 'none';
