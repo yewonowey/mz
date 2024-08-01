@@ -39,7 +39,7 @@
         button:hover {
             background-color: #0056b3;
         }
-        .result, .final-result {
+        .result {
             margin-top: 1em;
             font-size: 1.2em;
             color: #333;
@@ -49,14 +49,14 @@
 <body>
     <div class="container">
         <h1>MZ Classifier</h1>
-        <form id="classifyForm" style="display:none;">
+        <form id="classifyForm">
             <input type="text" name="text" placeholder="Enter text" required>
-            <button type="submit">M?Z</button>
+            <button type="submit">Classify</button>
         </form>
-        <button id="startButton">하이띠예</button>
-        <button id="endButton" style="display:none;">빠이띠예</button>
+        <button id="startButton">Start</button>
+        <button id="endButton" style="display:none;">End</button>
         <div id="classifyResult" class="result"></div>
-        <div class="final-result" id="finalResult"></div>
+        <div id="finalResult" class="result"></div>
     </div>
     <script>
         let mzCount = 0;
@@ -82,24 +82,30 @@
                 },
                 body: JSON.stringify({ text })
             });
-            const result = await response.json();
-            if (result.result === 'MZ!') {
-                mzCount++;
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Server response:', result);
+                if (result.result === 'MZ!') {
+                    mzCount++;
+                } else {
+                    notMzCount++;
+                }
+                document.getElementById('classifyResult').textContent = `Classify Result: ${result.result}`;
+                e.target.reset();
             } else {
-                notMzCount++;
+                console.error('Failed to classify:', response.statusText);
+                document.getElementById('classifyResult').textContent = 'Error classifying text';
             }
-            document.getElementById('classifyResult').textContent = `이건 ${result.result}!`;
-            e.target.reset();
         });
 
         document.getElementById('endButton').addEventListener('click', function() {
             let finalResult = '';
             if (mzCount > notMzCount) {
-                finalResult = '말투 왜 그래? 인터넷 많이 하는 사람같아';
+                finalResult = '결과: mz네요';
             } else if (notMzCount > mzCount) {
-                finalResult = '인터넷 좀 더 하시길';
+                finalResult = '결과: not mz네요';
             } else {
-                finalResult = '얜 뭐지';
+                finalResult = '결과: mz와 not mz의 수가 같습니다';
             }
             document.getElementById('finalResult').textContent = finalResult;
             document.getElementById('classifyForm').style.display = 'none';
