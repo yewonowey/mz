@@ -62,9 +62,12 @@
         let notMzCount = 0;
 
         document.getElementById('startButton').addEventListener('click', function() {
+            mzCount = 0;
+            notMzCount = 0;
             document.getElementById('classifyForm').style.display = 'block';
             document.getElementById('startButton').style.display = 'none';
             document.getElementById('endButton').style.display = 'inline';
+            document.getElementById('result').textContent = '';
         });
 
         document.getElementById('classifyForm').addEventListener('submit', async function(e) {
@@ -95,8 +98,6 @@
                 finalResult = '결과: not mz네요';
             }
             document.getElementById('result').textContent = finalResult;
-            mzCount = 0;
-            notMzCount = 0;
             document.getElementById('classifyForm').style.display = 'none';
             document.getElementById('startButton').style.display = 'inline';
             document.getElementById('endButton').style.display = 'none';
