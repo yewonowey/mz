@@ -39,7 +39,7 @@
         button:hover {
             background-color: #0056b3;
         }
-        .result {
+        .result, .final-result {
             margin-top: 1em;
             font-size: 1.2em;
             color: #333;
@@ -56,6 +56,7 @@
         <button id="startButton">Start</button>
         <button id="endButton" style="display:none;">End</button>
         <div class="result" id="result"></div>
+        <div class="final-result" id="finalResult"></div>
     </div>
     <script>
         let mzCount = 0;
@@ -68,6 +69,7 @@
             document.getElementById('startButton').style.display = 'none';
             document.getElementById('endButton').style.display = 'inline';
             document.getElementById('result').textContent = '';
+            document.getElementById('finalResult').textContent = '';
         });
 
         document.getElementById('classifyForm').addEventListener('submit', async function(e) {
@@ -97,7 +99,7 @@
             } else {
                 finalResult = '결과: not mz네요';
             }
-            document.getElementById('result').textContent = finalResult;
+            document.getElementById('finalResult').textContent = finalResult;
             document.getElementById('classifyForm').style.display = 'none';
             document.getElementById('startButton').style.display = 'inline';
             document.getElementById('endButton').style.display = 'none';
