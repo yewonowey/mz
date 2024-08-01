@@ -55,7 +55,7 @@
         </form>
         <button id="startButton">Start</button>
         <button id="endButton" style="display:none;">End</button>
-        <div class="result" id="result"></div>
+        <div id="classifyResult" class="result"></div>
         <div class="final-result" id="finalResult"></div>
     </div>
     <script>
@@ -68,7 +68,7 @@
             document.getElementById('classifyForm').style.display = 'block';
             document.getElementById('startButton').style.display = 'none';
             document.getElementById('endButton').style.display = 'inline';
-            document.getElementById('result').textContent = '';
+            document.getElementById('classifyResult').textContent = '';
             document.getElementById('finalResult').textContent = '';
         });
 
@@ -88,7 +88,7 @@
             } else {
                 notMzCount++;
             }
-            document.getElementById('result').textContent = `Result: ${result.result}`;
+            document.getElementById('classifyResult').textContent = `Classify Result: ${result.result}`;
             e.target.reset();
         });
 
