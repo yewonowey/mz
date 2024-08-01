@@ -75,26 +75,33 @@
         document.getElementById('classifyForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const text = e.target.elements.text.value;
-            const response = await fetch('/classify', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ text })
-            });
-            if (response.ok) {
-                const result = await response.json();
-                console.log('Server response:', result);
-                if (result.result === 'MZ!') {
-                    mzCount++;
+            try {
+                const response = await fetch('/classify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('Server response:', result);
+                    if (result.result === 'MZ!') {
+                        mzCount++;
+                    } else {
+                        notMzCount++;
+                    }
+                    document.getElementById('classifyResult').textContent = `Classify Result: ${result.result}`;
+                    e.target.reset();
                 } else {
-                    notMzCount++;
+                    const errorText = await response.text();
+                    console.error('Error classifying text:', errorText);
+                    document.getElementById('classifyResult').textContent = `Error classifying text: ${response.statusText}`;
                 }
-                document.getElementById('classifyResult').textContent = `Classify Result: ${result.result}`;
-                e.target.reset();
-            } else {
-                console.error('Failed to classify:', response.statusText);
-                document.getElementById('classifyResult').textContent = 'Error classifying text';
+            } catch (error) {
+                console.error('Fetch error:', error);
+                document.getElementById('classifyResult').textContent = `Fetch error: ${error.message}`;
             }
         });
 
