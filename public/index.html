@@ -34,6 +34,7 @@
             border: none;
             border-radius: 4px;
             cursor: pointer;
+            margin: 0.5em;
         }
         button:hover {
             background-color: #0056b3;
@@ -52,9 +53,13 @@
             <input type="text" name="text" placeholder="Enter text" required>
             <button type="submit">Classify</button>
         </form>
+        <button id="endButton">End</button>
         <div class="result" id="result"></div>
     </div>
     <script>
+        let mzCount = 0;
+        let notMzCount = 0;
+
         document.getElementById('classifyForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             const text = e.target.elements.text.value;
@@ -66,7 +71,23 @@
                 body: JSON.stringify({ text })
             });
             const result = await response.json();
+            if (result.result === 'MZ!') {
+                mzCount++;
+            } else {
+                notMzCount++;
+            }
             document.getElementById('result').textContent = `Result: ${result.result}`;
+            e.target.reset();
+        });
+
+        document.getElementById('endButton').addEventListener('click', function() {
+            if (mzCount > notMzCount) {
+                document.getElementById('result').textContent = '결과: mz네요';
+            } else {
+                document.getElementById('result').textContent = '결과: not mz네요';
+            }
+            mzCount = 0;
+            notMzCount = 0;
         });
     </script>
 </body>
