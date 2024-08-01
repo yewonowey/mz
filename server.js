@@ -14,9 +14,15 @@ const client_secret = "ZJZLfH3nZw";
 const mz_file = 'mz_words.txt';
 const not_mz_file = 'not_mz_words.txt';
 
-const raw_data = load_data(mz_file, not_mz_file);
-const { data, vectorizer } = preprocess_data(raw_data);
-const classifier = train_model(data);
+let raw_data, data, vectorizer, classifier;
+
+try {
+    raw_data = load_data(mz_file, not_mz_file);
+    ({ data, vectorizer } = preprocess_data(raw_data));
+    classifier = train_model(data);
+} catch (error) {
+    console.error('Error loading or processing data:', error);
+}
 
 async function get_naver_search_suggestions(query) {
     const url = "https://openapi.naver.com/v1/search/errata.json";
@@ -29,7 +35,7 @@ async function get_naver_search_suggestions(query) {
         const suggestions = response.data.errata || [];
         return suggestions.length ? suggestions[0].corrected : query;
     } catch (error) {
-        console.error(error);
+        console.error('Error fetching suggestions:', error);
         return query;
     }
 }
@@ -38,13 +44,22 @@ async function get_naver_search_suggestions(query) {
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.post('/classify', async (req, res) => {
-    const userInput = req.body.text;
-    const correctedInput = await get_naver_search_suggestions(userInput);
-    const tokens = correctedInput.split(' ');
-    const vector = vectorizer.tfidfs(tokens);
-    const label = classifier.classify(vector) ? 'MZ!' : 'NOT MZ!';
+    try {
+        const userInput = req.body.text;
+        if (!userInput) {
+            return res.status(400).json({ result: 'Invalid input' });
+        }
 
-    res.json({ result: label });
+        const correctedInput = await get_naver_search_suggestions(userInput);
+        const tokens = correctedInput.split(' ');
+        const vector = vectorizer.tfidfs(tokens);
+        const label = classifier.classify(vector) ? 'MZ!' : 'NOT MZ!';
+
+        res.json({ result: label });
+    } catch (error) {
+        console.error('Error processing classification:', error);
+        res.status(500).json({ result: 'Error classifying text' });
+    }
 });
 
 app.listen(3000, () => {
