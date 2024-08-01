@@ -49,27 +49,26 @@
 <body>
     <div class="container">
         <h1>MZ Classifier</h1>
-        <form id="classifyForm">
-            <input type="text" name="text" placeholder="Enter text" required>
-            <button type="submit">Classify</button>
-        </form>
-        <button id="startButton">Start</button>
-        <button id="endButton" style="display:none;">End</button>
-        <div id="classifyResult" class="result"></div>
-        <div id="finalResult" class="result"></div>
+        <div id="startSection">
+            <button id="startButton">Start</button>
+        </div>
+        <div id="classifySection" style="display: none;">
+            <form id="classifyForm">
+                <input type="text" name="text" placeholder="Enter text" required>
+                <button type="submit">M?Z</button>
+            </form>
+            <button id="endButton" style="display: none;">End</button>
+            <div id="classifyResult" class="result"></div>
+            <div id="finalResult" class="result"></div>
+        </div>
     </div>
     <script>
         let mzCount = 0;
         let notMzCount = 0;
 
         document.getElementById('startButton').addEventListener('click', function() {
-            mzCount = 0;
-            notMzCount = 0;
-            document.getElementById('classifyForm').style.display = 'block';
-            document.getElementById('startButton').style.display = 'none';
-            document.getElementById('endButton').style.display = 'inline';
-            document.getElementById('classifyResult').textContent = '';
-            document.getElementById('finalResult').textContent = '';
+            document.getElementById('startSection').style.display = 'none';
+            document.getElementById('classifySection').style.display = 'block';
         });
 
         document.getElementById('classifyForm').addEventListener('submit', async function(e) {
@@ -115,9 +114,8 @@
                 finalResult = '결과: mz와 not mz의 수가 같습니다';
             }
             document.getElementById('finalResult').textContent = finalResult;
-            document.getElementById('classifyForm').style.display = 'none';
-            document.getElementById('startButton').style.display = 'inline';
-            document.getElementById('endButton').style.display = 'none';
+            document.getElementById('classifySection').style.display = 'none';
+            document.getElementById('startSection').style.display = 'block';
         });
     </script>
 </body>
