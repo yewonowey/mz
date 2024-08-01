@@ -95,11 +95,11 @@
         document.getElementById('endButton').addEventListener('click', function() {
             let finalResult = '';
             if (mzCount > notMzCount) {
-                finalResult = '결과: mz네요';
+                finalResult = '말투 왜 그래? 인터넷 많이 하는 사람같아';
             } else if (notMzCount > mzCount) {
-                finalResult = '결과: not mz네요';
+                finalResult = '인터넷 좀 더 하시길';
             } else {
-                finalResult = '결과: mz와 not mz의 수가 같습니다';
+                finalResult = '얜 뭐지';
             }
             document.getElementById('finalResult').textContent = finalResult;
             document.getElementById('classifyForm').style.display = 'none';
