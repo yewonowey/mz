@@ -53,7 +53,8 @@ app.post('/classify', async (req, res) => {
         const correctedInput = await get_naver_search_suggestions(userInput);
         const tokens = correctedInput.split(' ');
         const vector = vectorizer.tfidfs(tokens);
-        const label = classifier.classify(vector) ? 'MZ!' : 'NOT MZ!';
+        const isMz = classifier.classify(vector);
+        const label = isMz ? 'MZ!' : 'NOT MZ!';
 
         res.json({ result: label });
     } catch (error) {
