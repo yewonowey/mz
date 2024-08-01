@@ -85,12 +85,12 @@
             const result = await response.json();
             if (result.result === 'MZ!') {
                 mzCount++;
-                document.getElementById('classifyResult').textContent = `이건 ${result.result}`;
+                document.getElementById('classifyResult').textContent = `이건 NOT MZ!`;
             } else if (result.result === 'NOT MZ!') {
                 notMzCount++;
-                document.getElementById('classifyResult').textContent = `이건 ${result.result}`;
+                document.getElementById('classifyResult').textContent = `이건 MZ!`;
             } else {
-                document.getElementById('classifyResult').textContent = `Error: ${result.result}`;
+                document.getElementById('classifyResult').textContent = `이건 MZ!`;
             }
             e.target.reset();
         });
