@@ -1,116 +1,170 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>MZ Classifier</title>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+    />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
+      body {
+        font-family: "Roboto", sans-serif;
+        display: flex;
+        flex-direction: column; /* 컨테이너와 버튼을 수직으로 배치 */
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-image: url("./src/back.png"); /* 배경 이미지의 경로 */
+        background-size: cover; /* 이미지가 전체 배경을 덮도록 설정 */
+        background-position: center; /* 이미지가 중앙에 위치하도록 설정 */
+        background-repeat: no-repeat; /* 이미지 반복 방지 */
+      }
+      .container {
+        text-align: center;
+        padding: 2em;
+        border-radius: 12px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        max-width: 500px;
+        width: 90%;
+        background: rgba(
+          255,
+          255,
+          255,
+          0.8
+        ); /* 선택 사항: 컨테이너의 반투명 배경 */
+      }
+      h1 {
+        margin-bottom: 1em;
+        color: #333;
+      }
+      form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1em; /* 요소들 사이의 기본 간격 */
+      }
+      input[type="text"] {
+        padding: 0.75em;
+        width: 60%; /* 입력 필드 너비 조정 */
+        font-size: 1em;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        box-sizing: border-box;
+      }
+      button {
+        padding: 0.75em 1.5em;
+        font-size: 1em;
+        background-color: #292b26;
+        color: #fff;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+      }
+      button:hover {
+        background-color: #292b26;
+        transform: scale(1.05);
+      }
+      #endButton {
+        margin-top: 1em; /* 컨테이너와 버튼 사이의 공백을 설정 */
+        background-color: rgba(255, 255, 255, 0.8); /* 반투명 흰색 배경 */
+        color: #333; /* 텍스트 색상 */
+        border: 1px solid #ddd; /* 테두리 색상 */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 버튼에 약간의 그림자 추가 */
+      }
+      .result,
+      .final-result {
+        margin-top: 1em;
+        font-size: 1.2em;
+        color: #333;
+      }
+      @media (max-width: 600px) {
         .container {
-            text-align: center;
-            background-color: #fff;
-            padding: 2em;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+          padding: 1em;
         }
         input[type="text"] {
-            padding: 0.5em;
-            margin: 1em 0;
-            width: 80%;
-            font-size: 1em;
+          width: 80%; /* 모바일에서 입력 필드 너비 조정 */
         }
-        button {
-            padding: 0.5em 1em;
-            font-size: 1em;
-            background-color: #007BFF;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 0.5em;
-        }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .result, .final-result {
-            margin-top: 1em;
-            font-size: 1.2em;
-            color: #333;
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>MZ Classifier</h1>
-        <form id="classifyForm" style="display:none;">
-            <input type="text" name="text" placeholder="Enter text" required>
-            <button type="submit">M?Z</button>
-        </form>
-        <button id="startButton">하이띠예</button>
-        <button id="endButton" style="display:none;">빠이띠예</button>
-        <div id="classifyResult" class="result"></div>
-        <div class="final-result" id="finalResult"></div>
+      <h1>MZ Classifier</h1>
+      <form id="classifyForm" style="display: none">
+        <input type="text" name="text" placeholder="Enter text" required />
+        <button type="submit">M?Z</button>
+      </form>
+      <button id="startButton">하이띠예</button>
+      <div id="classifyResult" class="result"></div>
+      <div class="final-result" id="finalResult"></div>
     </div>
+    <button id="endButton" style="display: none">빠이띠예</button>
     <script>
-        let mzCount = 0;
-        let notMzCount = 0;
+      let mzCount = 0;
+      let notMzCount = 0;
 
-        document.getElementById('startButton').addEventListener('click', function() {
-            mzCount = 0;
-            notMzCount = 0;
-            document.getElementById('classifyForm').style.display = 'block';
-            document.getElementById('startButton').style.display = 'none';
-            document.getElementById('endButton').style.display = 'inline';
-            document.getElementById('classifyResult').textContent = '';
-            document.getElementById('finalResult').textContent = '';
+      document
+        .getElementById("startButton")
+        .addEventListener("click", function () {
+          mzCount = 0;
+          notMzCount = 0;
+          document.getElementById("classifyForm").style.display = "flex";
+          document.getElementById("startButton").style.display = "none";
+          document.getElementById("endButton").style.display = "inline";
+          document.getElementById("classifyResult").textContent = "";
+          document.getElementById("finalResult").textContent = "";
         });
 
-        document.getElementById('classifyForm').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const text = e.target.elements.text.value;
-            const response = await fetch('/classify', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ text })
-            });
-            const result = await response.json();
-            if (result.result === 'MZ!') {
-                mzCount++;
-                document.getElementById('classifyResult').textContent = `이건 NOT MZ!`;
-            } else if (result.result === 'NOT MZ!') {
-                notMzCount++;
-                document.getElementById('classifyResult').textContent = `이건 MZ!`;
-            } else {
-                document.getElementById('classifyResult').textContent = `이건 MZ!`;
-            }
-            e.target.reset();
+      document
+        .getElementById("classifyForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          const text = e.target.elements.text.value;
+          const response = await fetch("/classify", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ text }),
+          });
+          const result = await response.json();
+          if (result.result === "MZ!") {
+            mzCount++;
+            document.getElementById(
+              "classifyResult"
+            ).textContent = `이건 NOT MZ!`;
+          } else if (result.result === "NOT MZ!") {
+            notMzCount++;
+            document.getElementById("classifyResult").textContent = `이건 MZ!`;
+          } else {
+            document.getElementById("classifyResult").textContent = `이건 MZ!`;
+          }
+          e.target.reset();
         });
 
-        document.getElementById('endButton').addEventListener('click', function() {
-            let finalResult = '';
-            if (mzCount > notMzCount) {
-                finalResult = '말투 왜 그래? 인터넷 많이 하는 사람같아';
-            } else if (notMzCount > mzCount) {
-                finalResult = '인터넷 좀 더 하시길';
-            } else {
-                finalResult = '얜 뭐지';
-            }
-            document.getElementById('finalResult').textContent = finalResult;
-            document.getElementById('classifyForm').style.display = 'none';
-            document.getElementById('startButton').style.display = 'inline';
-            document.getElementById('startButton').textContent = '다시하기'; // 여기서 버튼의 텍스트를 변경합니다.
-            document.getElementById('endButton').style.display = 'none';
-            document.getElementById('classifyResult').textContent = '';
+      document
+        .getElementById("endButton")
+        .addEventListener("click", function () {
+          let finalResult = "";
+          if (mzCount > notMzCount) {
+            finalResult = "말투 왜 그래? 인터넷 많이 하는 사람같아,,";
+          } else if (notMzCount > mzCount) {
+            finalResult = "인터넷 좀 더 하시길..ㅂㅂ";
+          } else {
+            finalResult = "얜 뭐지";
+          }
+          document.getElementById("finalResult").textContent = finalResult;
+          document.getElementById("classifyForm").style.display = "none";
+          document.getElementById("startButton").style.display = "inline";
+          document.getElementById("startButton").textContent = "다시하기"; // 여기서 버튼의 텍스트를 변경합니다.
+          document.getElementById("endButton").style.display = "none";
+          document.getElementById("classifyResult").textContent = "";
+          mzCount = 0; // mzCount를 0으로 초기화
+          notMzCount = 0; // notMzCount를 0으로 초기화
         });
     </script>
-</body>
+  </body>
 </html>
